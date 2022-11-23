@@ -1,0 +1,48 @@
+import cv2
+import numpy
+import socket
+import struct
+# import copy
+# import numpy as np
+
+HOST = '192.168.222.1'
+PORT = 1080
+buffSize = 65535
+
+if __name__ == '__main__':
+    server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server.bind((HOST, PORT))
+    print('waiting for connect...')
+    i = 7
+
+    while True:
+        data, address = server.recvfrom(buffSize)
+        if len(data) == 1 and data[0] == 1:
+            server.close()
+            cv2.destroyAllWindows()
+            exit()
+        if len(data) != 4:
+            length = 0
+            continue
+        else:
+            length = struct.unpack('i', data)[0]
+        data, address = server.recvfrom(buffSize)
+        if length != len(data):
+            print("check error")
+            continue
+        data = numpy.array(bytearray(data))
+        img_decode = cv2.imdecode(data, 1)
+        print('data received')
+
+        cv2.imshow('frames', img_decode)
+
+        key = cv2.waitKey(1)
+        if key == ord('s'):
+            cv2.imwrite('/photo_tennis/tennis_' + str(i) + '.jpg', img_decode)
+            i = i + 1
+
+        if cv2.waitKey(1) == 27:
+            break
+
+    server.close()
+    cv2.destroyAllWindows()
