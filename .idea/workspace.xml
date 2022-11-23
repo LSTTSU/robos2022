@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9d5acfaf-27e9-464b-99fa-699339e8b8f1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea.bk/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea.bk/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea.bk/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea.bk/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea.bk/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea.bk/python_code.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/python_code.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pc_host.py" afterDir="false" />
-    </list>
+    <list default="true" id="9d5acfaf-27e9-464b-99fa-699339e8b8f1" name="Changes" comment="20221123" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -120,8 +106,23 @@
       <workItem from="1669192738037" duration="295000" />
       <workItem from="1669193045720" duration="122000" />
       <workItem from="1669193179682" duration="107000" />
-      <workItem from="1669193485012" duration="1912000" />
+      <workItem from="1669193485012" duration="2219000" />
     </task>
+    <task id="LOCAL-00001" summary="20221123">
+      <created>1669197768851</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1669197768851</updated>
+    </task>
+    <task id="LOCAL-00002" summary="20221123">
+      <created>1669197812926</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1669197812926</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,6 +138,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="20221123" />
+    <option name="LAST_COMMIT_MESSAGE" value="20221123" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/python_code$main.coverage" NAME="main Coverage Results" MODIFIED="1669191330856" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
