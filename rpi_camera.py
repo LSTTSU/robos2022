@@ -14,32 +14,35 @@ class RpiCamera(object):
 
         host = '192.168.12.90'
         port = 1080
-        self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.server.connect((host, port))
-        self.camera = PiCamera()
-        self.camera.resolution = (640, 480)
-        self.camera.framerate = 32
+
+        self.transmission = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.transmission.connect((host, port))
+        
+        self.rpi_camera = PiCamera()
+        self.rpi_camera.resolution = (640, 480)
+        self.rpi_camera.framerate = 32
 
     def rpi_camera_init(self):
-        raw_capture = PiRGBArray(self.camera, size=(640, 480))
-        raw_capture.truncate(0)
-        time.sleep(2)
+        time.sleep(0.5)
+        original_img = PiRGBArray(self.rpi_camera, size=(640, 480))
+        original_img.truncate(0)
+        time.sleep(3)
 
-        return self.camera, raw_capture
+        return self.rpi_camera, original_img
 
     def video_transmission_to_pc(self, frame):
         result, img_encode = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 10])
         try:
-            self.server.sendall(struct.pack('i', img_encode.shape[0]))
-            self.server.sendall(img_encode)
-            print("have sent one frame")
+            self.transmission.sendall(struct.pack('i', img_encode.shape[0]))
+            self.transmission.sendall(img_encode)
+            print("data sent")
         except:
-            print("fail to send the frame")
+            print("fail")
 
     def camera_cleanup(self):
-        self.server.sendall(struct.pack('c', 1))
-        self.server.close()
-        self.camera.close()
+        self.transmission.sendall(struct.pack('c', 1))
+        self.transmission.close()
+        self.rpi_camera.close()
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import struct
 # import copy
 # import numpy as np
 
-HOST = '192.168.222.1'
+HOST = '192.168.0.106'
 PORT = 1080
 buffSize = 65535
 
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         if len(data) == 1 and data[0] == 1:
             server.close()
             cv2.destroyAllWindows()
-            exit()
+            exit(0)
         if len(data) != 4:
             length = 0
             continue
