@@ -2,23 +2,25 @@ import cv2
 import numpy
 import socket
 import struct
+
 # import copy
 # import numpy as np
 
 HOST = '192.168.0.106'
 PORT = 1080
+
 buffSize = 65535
 
 if __name__ == '__main__':
-    server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server.bind((HOST, PORT))
+    host = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    host.bind((HOST, PORT))
     print('waiting for connect...')
     i = 7
 
     while True:
-        data, address = server.recvfrom(buffSize)
+        data, address = host.recvfrom(buffSize)
         if len(data) == 1 and data[0] == 1:
-            server.close()
+            host.close()
             cv2.destroyAllWindows()
             exit(0)
         if len(data) != 4:
@@ -26,7 +28,7 @@ if __name__ == '__main__':
             continue
         else:
             length = struct.unpack('i', data)[0]
-        data, address = server.recvfrom(buffSize)
+        data, address = host.recvfrom(buffSize)
         if length != len(data):
             print("check error")
             continue
@@ -34,7 +36,7 @@ if __name__ == '__main__':
         img_decode = cv2.imdecode(data, 1)
         print('data received')
 
-        cv2.imshow('frames', img_decode)
+        cv2.imshow('datas', img_decode)
 
         key = cv2.waitKey(1)
         if key == ord('s'):
@@ -44,5 +46,5 @@ if __name__ == '__main__':
         if cv2.waitKey(1) == 27:
             break
 
-    server.close()
+    host.close()
     cv2.destroyAllWindows()
