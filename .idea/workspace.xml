@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c94d0eb6-f939-4613-b653-4027aac9be09" name="Changes" comment="20221126">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tennis_detect.py" beforeDir="false" afterPath="$PROJECT_DIR$/tennis_detect.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +124,7 @@
       <workItem from="1669276530073" duration="609000" />
       <workItem from="1669365256349" duration="93000" />
       <workItem from="1669438336280" duration="150000" />
-      <workItem from="1669442542934" duration="621000" />
+      <workItem from="1669442542934" duration="1087000" />
     </task>
     <task id="LOCAL-00001" summary="+mbed files">
       <created>1669198758010</created>
@@ -163,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669442632475</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="20221126">
+      <created>1669443174723</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1669443174723</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
