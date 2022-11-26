@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c94d0eb6-f939-4613-b653-4027aac9be09" name="Changes" comment="KS">
+    <list default="true" id="c94d0eb6-f939-4613-b653-4027aac9be09" name="Changes" comment="changed username">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -119,6 +119,8 @@
       <workItem from="1669264936575" duration="61000" />
       <workItem from="1669274303724" duration="2082000" />
       <workItem from="1669276530073" duration="609000" />
+      <workItem from="1669365256349" duration="93000" />
+      <workItem from="1669438336280" duration="150000" />
     </task>
     <task id="LOCAL-00001" summary="+mbed files">
       <created>1669198758010</created>
@@ -141,7 +143,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669359252807</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="changed username">
+      <created>1669365332463</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1669365332463</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +172,7 @@
     <MESSAGE value="+mbed files" />
     <MESSAGE value="+rpi_camera" />
     <MESSAGE value="KS" />
-    <option name="LAST_COMMIT_MESSAGE" value="KS" />
+    <MESSAGE value="changed username" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed username" />
   </component>
 </project>
