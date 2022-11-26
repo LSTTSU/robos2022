@@ -7,7 +7,7 @@ import copy
 # import pdb
 
 
-class CarDetect(object):
+class TennisDetect(object):
     def __init__(self):
         #        self.lower_range = np.array([25, 0, 0])
         #       self.higher_range = np.array([50, 255, 255])
