@@ -5,6 +5,7 @@ import struct
 
 # import copy
 # import numpy as np
+# ks
 
 HOST = '192.168.0.106'
 PORT = 1080
