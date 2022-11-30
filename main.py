@@ -25,7 +25,7 @@ if __name__ == '__main__':
         robot = Robot()
 
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (640, 480))
+        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (720,480))
 
         video_return = True
         radius_mov_ave = 35
