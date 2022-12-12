@@ -19,12 +19,12 @@ class RpiCamera(object):
         self.transmission.connect((host, port))
         
         self.rpi_camera = PiCamera()
-        self.rpi_camera.resolution = (640, 480)
+        self.rpi_camera.resolution = (720,480)
         self.rpi_camera.framerate = 32
 
     def rpi_camera_init(self):
         time.sleep(0.5)
-        original_img = PiRGBArray(self.rpi_camera, size=(640, 480))
+        original_img = PiRGBArray(self.rpi_camera, size=(720,480))
         original_img.truncate(0)
         time.sleep(3)
 

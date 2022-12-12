@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 from picamera.array import PiRGBArray
-from picamera import PiCamera
+from picamera import Pi22Camera
 
 from rpi_camera import RpiCamera
 from tennis_detect import TennisDetect
@@ -14,7 +14,7 @@ GPIO.setwarnings(False)  # Disable warning
 GPIO.setmode(GPIO.BCM)  # BCM coding
 
 
-class Robot(RpiCamera, TennisDetect):  # create class Car, which derives all the modules
+class Robot(RpiCamera, TennisDetect):
     def __init__(self):
         RpiCamera.__init__(self)
         TennisDetect.__init__(self)
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         robot = Robot()
 
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (640, 480))
+        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (720,480))
 
         video_return = True
         radius_mov_ave = 35
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         camera, rawCapture = robot.rpi_camera_init()  # Initialize the PiCamera
 
         for raw_frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
-            t_start = time.time()  # 用来计算FPS
+            t_start = time.time()  # FPS
 
             frame_origin = raw_frame.array
 
