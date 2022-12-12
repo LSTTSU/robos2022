@@ -9,9 +9,14 @@ from picamera import Pi22Camera
 
 from rpi_camera import RpiCamera
 from tennis_detect import TennisDetect
+from smbus import SMBus
 
 GPIO.setwarnings(False)  # Disable warning
 GPIO.setmode(GPIO.BCM)  # BCM coding
+
+stm_main = 0x29
+i2cbus = SMBus(1)
+stm_sleep_time = 0.01
 
 
 class Robot(RpiCamera, TennisDetect):
@@ -25,12 +30,11 @@ if __name__ == '__main__':
         robot = Robot()
 
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (720,480))
+        video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (720, 480))
 
         video_return = True
         radius_mov_ave = 35
         x_mov_ave = 320
-        turn_speed = 60
 
         camera, rawCapture = robot.rpi_camera_init()  # Initialize the PiCamera
 
@@ -60,7 +64,34 @@ if __name__ == '__main__':
             mfps = 1 / (time.time() - t_start)  # FPS
             print('FPS: ', mfps)
 
+            error_x = 0.0 - x_mov_ave
+            error_l = 80.0 - radius_mov_ave
 
+            speed_r = - 0.02 * error_x
+            speed_l = - 0.02 * error_l
+
+            if speed_l < -1.0:
+                speed_l = -1.0
+            elif speed_l > 1.0:
+                speed_l = 1.0
+
+            if speed_r < -1.0:
+                speed_r = -1.0
+            elif speed_r > 1.0:
+                speed_l = 1.0
+
+            if error_x < -10 or error_x > 10:
+                speed_l = 0
+            else:
+                speed_r = 0
+
+            i2cbus.write_byte(stm_main, 0x00)
+            time.sleep(stm_sleep_time)
+            i2cbus.write_byte(stm_main, hex(int(255 * speed_l / 1.0)))
+            time.sleep(stm_sleep_time)
+            i2cbus.write_byte(stm_main, hex(int(255 * speed_r / 1.0)))
+            time.sleep(stm_sleep_time)
+            i2cbus.write_byte(stm_main, 0x00)
 
     except KeyboardInterrupt:
         print("stopped")
