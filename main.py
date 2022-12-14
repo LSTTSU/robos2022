@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 from picamera.array import PiRGBArray
-from picamera import Pi22Camera
+from picamera import PiCamera
 
 from rpi_camera import RpiCamera
 from tennis_detect import TennisDetect
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         video_out = cv2.VideoWriter('out.mp4', fourcc, 10, (720, 480))
 
-        video_return = True
+        video_return = False
         radius_mov_ave = 35
         x_mov_ave = 320
 
@@ -64,35 +64,45 @@ if __name__ == '__main__':
             mfps = 1 / (time.time() - t_start)  # FPS
             print('FPS: ', mfps)
 
-            error_x = 0.0 - x_mov_ave
+            error_x = 540.0 - x_mov_ave
             error_l = 80.0 - radius_mov_ave
 
-            speed_r = - 0.02 * error_x
-            speed_l = - 0.02 * error_l
+            speed_r = 0.0002 * error_x
+            # speed_r = 0.0
+            speed_l =  0.013 * error_l
+            # speed_l =  -0.2
 
             if speed_l < -1.0:
                 speed_l = -1.0
             elif speed_l > 1.0:
                 speed_l = 1.0
 
-            if speed_r < -1.0:
-                speed_r = -1.0
-            elif speed_r > 1.0:
-                speed_l = 1.0
+            if speed_r < -0.1:
+                speed_r = -0.1
+            elif speed_r > 0.1:
+                speed_l = 0.1
 
-            if error_x < -10 or error_x > 10:
-                speed_l = 0
-            else:
-                speed_r = 0
+            # if error_x < -25 or error_x > 25:
+            #     speed_l = 0
+            # else:
+            #     speed_r = 0
 
-            i2cbus.write_byte(stm_main, 0x00)
+            i2cbus.write_byte(stm_main, (int(127 * 0) + int(127)))
             time.sleep(stm_sleep_time)
-            i2cbus.write_byte(stm_main, hex(int(255 * speed_l / 1.0)))
+            i2cbus.write_byte(stm_main, (int(127 * speed_l) + int(127)))
             time.sleep(stm_sleep_time)
-            i2cbus.write_byte(stm_main, hex(int(255 * speed_r / 1.0)))
+            i2cbus.write_byte(stm_main, (int(127 * speed_r) + int(127)))
             time.sleep(stm_sleep_time)
-            i2cbus.write_byte(stm_main, 0x00)
+            i2cbus.write_byte(stm_main,0x00)
 
     except KeyboardInterrupt:
+        # i2cbus.write_byte(stm_main,0x00)
+        # time.sleep(stm_sleep_time)
+        # i2cbus.write_byte(stm_main,0x00)
+        # time.sleep(stm_sleep_time)
+        # i2cbus.write_byte(stm_main,0x00)
+        # time.sleep(stm_sleep_time)
+        # i2cbus.write_byte(stm_main,0x00)
+        # time.sleep(0.5)
         print("stopped")
         # video_out.release()

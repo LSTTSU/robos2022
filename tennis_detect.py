@@ -30,7 +30,7 @@ class TennisDetect(object):
 
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # rgb to gray
 
-        circles = cv2.HoughCircles(gray_img, cv2.HOUGH_GRADIENT, 1, 60, param1=100, param2=20, minRadius=25,
+        circles = cv2.HoughCircles(gray_img, cv2.HOUGH_GRADIENT, 0.25, 300, param1=100, param2=20, minRadius=25,
                                    maxRadius=100)
 
         if circles is not None:
