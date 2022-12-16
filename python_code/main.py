@@ -14,11 +14,16 @@ from smbus import SMBus
 GPIO.setwarnings(False)  # Disable warning
 GPIO.setmode(GPIO.BCM)  # BCM coding
 
+camera_center_x = 1080.0/2
+radius_target = 80.0
+
 stm_main = 0x29
 i2cbus = SMBus(1)
 stm_sleep_time = 0.01
 arm_status = 0x00
 robot_status = 0x00             #  0x00 means status 1
+ball_search_start_time = 0
+ball_search_end_time = 0
 
 class Robot(RpiCamera, TennisDetect):
     def __init__(self):
@@ -66,8 +71,8 @@ if __name__ == '__main__':
 
             if robot_status == 0x00:
 
-                error_x = 540.0 - x_mov_ave
-                error_l = 80.0 - radius_mov_ave
+                error_x = camera_center_x - x_mov_ave
+                error_l = radius_target - radius_mov_ave
 
                 speed_r = 0.0002 * error_x
                 # speed_r = 0.0
@@ -84,6 +89,12 @@ if __name__ == '__main__':
                 elif speed_r > 0.1:
                     speed_l = 0.1
 
+                if abs(x_mov_ave - camera_center_x) > 50 or abs(radius_mov_ave - radius_target) > 15:
+                    ball_search_start_time = time.time()
+                ball_search_end_time = time.time();
+
+                if ball_search_end_time - ball_search_start_time > 5.0:
+                    robot_status = 0x01;
                 # if error_x < -25 or error_x > 25:
                 #     speed_l = 0
                 # else:
@@ -93,12 +104,19 @@ if __name__ == '__main__':
 
                 speed_r = 0.0
                 speed_l = 0.25
+                arm_status = 0x00
+                time.sleep(3.0)
+                speed_r = 0.0
+                speed_l = 0.0
                 arm_status = 0x23
+                time.sleep(3.0)
+
+                robot_status = 0x02;
 
             if robot_status == 0x02:
 
                 speed_r = 0.0
-                speed_l = 0.25
+                speed_l = 0.00
                 arm_status = 0x00
 
             i2cbus.write_byte(stm_main, (int(127 * 0) + int(127)))
