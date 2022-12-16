@@ -11,8 +11,16 @@ from rpi_camera import RpiCamera
 from tennis_detect import TennisDetect
 from smbus import SMBus
 
+import spidev
+
+
 GPIO.setwarnings(False)  # Disable warning
 GPIO.setmode(GPIO.BCM)  # BCM coding
+
+spi = spidev.SpiDev()
+spi.open(0,0)
+spi.max_speed_hz = 1000000
+spi_writen_flag = 0x00
 
 camera_center_x = 1080.0/2
 radius_target = 80.0
@@ -22,8 +30,17 @@ i2cbus = SMBus(1)
 stm_sleep_time = 0.01
 arm_status = 0x00
 robot_status = 0x00             #  0x00 means status 1
-ball_search_start_time = 0
-ball_search_end_time = 0
+tennis_search_start_time = 0
+tennis_search_end_time = 0
+
+spi.xfer2([0x09,0x00])
+spi.xfer2([0x0a,0x04])
+spi.xfer2([0x0b,0x07])
+spi.xfer2([0x0c,0x01])
+spi.xfer2([0x0f,0x00])
+spi.xfer2([0x00,0x00])
+spi.xfer2([0x00,0x00])
+spi.xfer2([0x00,0x00])
 
 class Robot(RpiCamera, TennisDetect):
     def __init__(self):
@@ -67,14 +84,24 @@ if __name__ == '__main__':
             rawCapture.truncate(0)
 
             mfps = 1 / (time.time() - t_start)  # FPS
-            print('FPS: ', mfps)
+            print('FPS: ', mfps, robot_status)
 
             if robot_status == 0x00:
+                if spi_writen_flag == 0x00:
+                    spi.xfer3([0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00])
+                    spi.xfer3([0x02,0x00,0x02,0x03,0x02,0xc0,0x02,0x00])
+                    spi.xfer3([0x03,0x00,0x03,0x02,0x03,0x40,0x03,0x00])
+                    spi.xfer3([0x04,0x00,0x04,0x03,0x04,0xc0,0x04,0x00])
+                    spi.xfer3([0x05,0x00,0x05,0x00,0x05,0x00,0x05,0x00])
+                    spi.xfer3([0x06,0x00,0x06,0x10,0x06,0x08,0x06,0x00])
+                    spi.xfer3([0x07,0x00,0x07,0x10,0x07,0x08,0x07,0x00])
+                    spi.xfer3([0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00])
+                    spi_writen_flag = 0x01
 
                 error_x = camera_center_x - x_mov_ave
                 error_l = radius_target - radius_mov_ave
 
-                speed_r = 0.0002 * error_x
+                speed_r = 0.00022 * error_x
                 # speed_r = 0.0
                 speed_l =  0.013 * error_l
                 # speed_l =  -0.2
@@ -89,35 +116,80 @@ if __name__ == '__main__':
                 elif speed_r > 0.1:
                     speed_l = 0.1
 
-                if abs(x_mov_ave - camera_center_x) > 50 or abs(radius_mov_ave - radius_target) > 15:
-                    ball_search_start_time = time.time()
-                ball_search_end_time = time.time();
+                if abs(x_mov_ave - camera_center_x) > 200 or abs(radius_mov_ave - radius_target) > 20:
+                    tennis_search_start_time = time.time()
+                tennis_search_end_time = time.time();
 
-                if ball_search_end_time - ball_search_start_time > 5.0:
+                # print(tennis_search_end_time-tennis_search_start_time)
+
+                if tennis_search_end_time - tennis_search_start_time > 3.0:
                     robot_status = 0x01;
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
                 # if error_x < -25 or error_x > 25:
                 #     speed_l = 0
                 # else:
                 #     speed_r = 0
 
             if robot_status == 0x01:
+                if spi_writen_flag == 0x00:
+                    spi.xfer3([0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00])
+                    spi.xfer3([0x02,0x00,0x02,0x03,0x02,0xc0,0x02,0x00])
+                    spi.xfer3([0x03,0x00,0x03,0x02,0x03,0x40,0x03,0x00])
+                    spi.xfer3([0x04,0x00,0x04,0x23,0x04,0xc4,0x04,0x00])
+                    spi.xfer3([0x05,0x00,0x05,0x10,0x05,0x08,0x05,0x00])
+                    spi.xfer3([0x06,0x00,0x06,0x08,0x06,0x10,0x06,0x00])
+                    spi.xfer3([0x07,0x00,0x07,0x10,0x07,0x08,0x07,0x00])
+                    spi.xfer3([0x08,0x00,0x08,0x20,0x08,0x04,0x08,0x00])
+                    spi_writen_flag = 0x01
 
                 speed_r = 0.0
-                speed_l = 0.25
+                speed_l = 0.33
                 arm_status = 0x00
-                time.sleep(3.0)
-                speed_r = 0.0
-                speed_l = 0.0
-                arm_status = 0x23
-                time.sleep(3.0)
 
-                robot_status = 0x02;
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 3.0:
+                    robot_status = 0x02;
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
 
             if robot_status == 0x02:
 
                 speed_r = 0.0
                 speed_l = 0.00
+                arm_status = 0x23
+
+                if spi_writen_flag == 0x00:
+                    spi.xfer3([0x01,0x00,0x01,0x00,0x01,0x00,0x01,0x00])
+                    spi.xfer3([0x02,0x00,0x02,0x01,0x02,0x80,0x02,0x00])
+                    spi.xfer3([0x03,0x00,0x03,0x02,0x03,0x40,0x03,0x00])
+                    spi.xfer3([0x04,0x00,0x04,0x00,0x04,0x00,0x04,0x00])
+                    spi.xfer3([0x05,0x00,0x05,0x00,0x05,0x00,0x05,0x00])
+                    spi.xfer3([0x06,0x00,0x06,0x0a,0x06,0x50,0x06,0x00])
+                    spi.xfer3([0x07,0x00,0x07,0x04,0x07,0x20,0x07,0x00])
+                    spi.xfer3([0x08,0x00,0x08,0x00,0x08,0x00,0x08,0x00])
+                    spi_writen_flag = 0x01
+
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 30.0:
+                    robot_status = 0x03
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
+
+
+            if robot_status == 0x03:
+
+                speed_r = 0.0
+                speed_l = 0.00
                 arm_status = 0x00
+
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 3.0:
+                    robot_status = 0x04
+                    tennis_search_start_time = time.time()
 
             i2cbus.write_byte(stm_main, (int(127 * 0) + int(127)))
             time.sleep(stm_sleep_time)
