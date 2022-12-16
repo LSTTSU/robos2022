@@ -17,6 +17,7 @@ GPIO.setmode(GPIO.BCM)  # BCM coding
 stm_main = 0x29
 i2cbus = SMBus(1)
 stm_sleep_time = 0.01
+arm_status = 0x00
 
 
 class Robot(RpiCamera, TennisDetect):
@@ -49,7 +50,6 @@ if __name__ == '__main__':
                 video_out.write(frame_detect)
             else:
                 x_pos, y_pos, radius = robot.tennis_detect(frame_origin, video_return)
-                # car.VideoTransmission(frame_origin)
 
             # print('x: ', x_pos ,'  y: ', y_pos, '  r: ', radius)
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
             time.sleep(stm_sleep_time)
             i2cbus.write_byte(stm_main, (int(127 * speed_r) + int(127)))
             time.sleep(stm_sleep_time)
-            i2cbus.write_byte(stm_main,0x00)
+            i2cbus.write_byte(stm_main,arm_status)
 
     except KeyboardInterrupt:
         # i2cbus.write_byte(stm_main,0x00)
