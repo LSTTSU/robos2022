@@ -50,11 +50,11 @@ if __name__ == '__main__':
             frame_origin = raw_frame.array
 
             if video_return:
-                frame_detect, x_pos, y_pos, radius = robot.tennis_detect(frame_origin, video_return)
+                frame_detect, x_pos, y_pos, radius, rate = robot.tennis_detect(frame_origin, video_return)
                 robot.video_transmission_to_pc(frame_detect)
                 video_out.write(frame_detect)
             else:
-                x_pos, y_pos, radius = robot.tennis_detect(frame_origin, video_return)
+                x_pos, y_pos, radius, rate = robot.tennis_detect(frame_origin, video_return)
 
             # print('x: ', x_pos ,'  y: ', y_pos, '  r: ', radius)
 

@@ -67,11 +67,12 @@ if __name__ == '__main__':
             frame_origin = raw_frame.array
 
             if video_return:
-                frame_detect, x_pos, y_pos, radius = robot.tennis_detect(frame_origin, video_return)
+                frame_detect, x_pos, y_pos, radius, rate = robot.tennis_detect(frame_origin, video_return)
                 robot.video_transmission_to_pc(frame_detect)
                 video_out.write(frame_detect)
+
             else:
-                x_pos, y_pos, radius = robot.tennis_detect(frame_origin, video_return)
+                x_pos, y_pos, radius, rate = robot.tennis_detect(frame_origin, video_return)
 
             # print('x: ', x_pos ,'  y: ', y_pos, '  r: ', radius)
 
@@ -101,10 +102,11 @@ if __name__ == '__main__':
                 error_x = camera_center_x - x_mov_ave
                 error_l = radius_target - radius_mov_ave
 
-                speed_r = 0.00022 * error_x
+                speed_r = 0.00023 * error_x
                 # speed_r = 0.0
                 speed_l =  0.013 * error_l
-                # speed_l =  -0.2
+                # speed_l = -0.5
+
 
                 if speed_l < -1.0:
                     speed_l = -1.0
@@ -114,7 +116,11 @@ if __name__ == '__main__':
                 if speed_r < -0.1:
                     speed_r = -0.1
                 elif speed_r > 0.1:
-                    speed_l = 0.1
+                    speed_r = 0.1
+
+                if rate < 0.6:
+                    speed_l = 0
+                    speed_r = 0
 
                 if abs(x_mov_ave - camera_center_x) > 200 or abs(radius_mov_ave - radius_target) > 20:
                     tennis_search_start_time = time.time()
@@ -122,8 +128,8 @@ if __name__ == '__main__':
 
                 # print(tennis_search_end_time-tennis_search_start_time)
 
-                if tennis_search_end_time - tennis_search_start_time > 3.0:
-                    robot_status = 0x01;
+                if tennis_search_end_time - tennis_search_start_time > 2.5:
+                    robot_status = 0x01
                     tennis_search_start_time = time.time()
                     spi_writen_flag = 0x00
                 # if error_x < -25 or error_x > 25:
@@ -149,7 +155,7 @@ if __name__ == '__main__':
 
                 tennis_search_end_time = time.time()
 
-                if tennis_search_end_time - tennis_search_start_time > 3.0:
+                if tennis_search_end_time - tennis_search_start_time > 2.75:
                     robot_status = 0x02;
                     tennis_search_start_time = time.time()
                     spi_writen_flag = 0x00
@@ -173,7 +179,7 @@ if __name__ == '__main__':
 
                 tennis_search_end_time = time.time()
 
-                if tennis_search_end_time - tennis_search_start_time > 30.0:
+                if tennis_search_end_time - tennis_search_start_time > 0.5:
                     robot_status = 0x03
                     tennis_search_start_time = time.time()
                     spi_writen_flag = 0x00
@@ -183,13 +189,53 @@ if __name__ == '__main__':
 
                 speed_r = 0.0
                 speed_l = 0.00
+                arm_status = 0x23
+
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 0.5:
+                    robot_status = 0x04
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
+
+            if robot_status == 0x04:
+
+                speed_r = 0.2
+                speed_l = 0.0
+                arm_status = 0x23
+
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 1.0:
+                    robot_status = 0x05
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
+
+            if robot_status == 0x05:
+
+                speed_r = 0.0
+                speed_l = 0.4
+                arm_status = 0x23
+
+                tennis_search_end_time = time.time()
+
+                if tennis_search_end_time - tennis_search_start_time > 3.0:
+                    robot_status = 0x06
+                    tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
+
+            if robot_status == 0x06:
+
+                speed_r = 0.0
+                speed_l = 0.0
                 arm_status = 0x00
 
                 tennis_search_end_time = time.time()
 
                 if tennis_search_end_time - tennis_search_start_time > 3.0:
-                    robot_status = 0x04
+                    robot_status = 0x07
                     tennis_search_start_time = time.time()
+                    spi_writen_flag = 0x00
 
             i2cbus.write_byte(stm_main, (int(127 * 0) + int(127)))
             time.sleep(stm_sleep_time)

@@ -12,7 +12,7 @@ from picamera import PiCamera
 class RpiCamera(object):
     def __init__(self):
 
-        host = '192.168.0.22'
+        host = '192.168.0.25'
         port = 1080
 
         self.transmission = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

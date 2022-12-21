@@ -20,6 +20,7 @@ class TennisDetect(object):
         x_pos = 0
         y_pos = 0
         radius = 0
+        rate_return = 0
         img_out = copy.copy(img)
         img = img[self.cut_edge:479, :, :]
         img = cv2.blur(img, (5, 5))
@@ -41,6 +42,7 @@ class TennisDetect(object):
 
             num = circles[0].shape[0]
             rate = np.zeros(num)
+            rate_return = 0
 
             for i in range(num):  # traverse all detected circles
                 detect_area = (
@@ -59,13 +61,15 @@ class TennisDetect(object):
                 x_pos = x[i]
                 y_pos = y[i]
                 radius = r[i]
+                rate_return = rate[i]
+
             print('x: ', x[i], '  y: ', y[i], '  r: ', r[i], '   rate: ', rate[i])
 
         if video_return:  # if it needs to return the frame with the detected tennis
             img_out = cv2.circle(img_out, (x_pos, y_pos + self.cut_edge), radius, (0, 0, 255), thickness=10)
-            return img_out, x_pos, y_pos, radius
+            return img_out, x_pos, y_pos, radius, rate_return
         else:  # if it only needs to return the position of the detected tennis
-            return x_pos, y_pos, radius
+            return x_pos, y_pos, radius, rate_return
 
 
 if __name__ == '__main__':
