@@ -14,7 +14,7 @@ from smbus import SMBus
 GPIO.setwarnings(False)  # Disable warning
 GPIO.setmode(GPIO.BCM)  # BCM coding
 
-camera_center_x = 1080.0/2
+camera_center_x = 1080.0/2      # center of the frame used as x axis target
 radius_target = 80.0
 
 stm_main = 0x29
