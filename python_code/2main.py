@@ -1,3 +1,5 @@
+# this is a sub file of main.py
+
 import RPi.GPIO as GPIO
 import time
 import cv2

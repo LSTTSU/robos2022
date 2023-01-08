@@ -8,12 +8,12 @@ const double wheel_r = 50;
 const int arm_off = 1700;
 const int arm_on = 1190;
 
-PwmOut motor1_1(PB_3);  // D3
-PwmOut motor1_2(PB_4);  // D5
-PwmOut motor2_1(PB_10); // D6
-PwmOut motor2_2(PC_7);  // D9
-PwmOut motor3_1(PB_6);  // D10
-PwmOut motor3_2(PA_7);  // D11
+PwmOut motor1_1(PB_13);  //
+PwmOut motor1_2(PB_14);  // 
+PwmOut motor2_1(PB_10); //
+PwmOut motor2_2(PC_7);  //
+PwmOut motor3_1(PA_6);  // 
+PwmOut motor3_2(PA_5);  // 
 
 PwmOut arm1(PB_7);
 
@@ -78,9 +78,7 @@ int main() {
 
 void drive_wheel(double *speed) {
 
-  // printf("%f %f %f \n", speed[0], speed[1], speed[2]);
-
-  double speed_wheel[3] = { 
+  double speed_wheel[3] = {
       // the speed of each motor
       1.0 * speed[0] + 0.0 * speed[1] + wheel_r * speed[2],
       -0.5 * speed[0] + sqrt(3) / 2.0 * speed[1] + wheel_r * speed[2],
